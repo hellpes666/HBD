@@ -1,0 +1,152 @@
+---
+interface Props {
+    title: string;
+    price: string;
+    img: string;
+    size: string[] | string | any;
+}
+
+const { title, price, img, size } = Astro.props;
+---
+
+<div id="popup-overlay" class="popup-overlay hidden">
+    <div class="popup-content">
+        <button class="close-button">&times;</button>
+        <div class="popup-body">
+            <img src={img} alt={title} width="256" height="256" />
+            <div class="product-info">
+                <h2>{title}</h2>
+                <p class="price">{price} руб.</p>
+                <div class="sizes">
+                    <h3>Доступные размеры:</h3>
+                    {Array.isArray(size) ? (
+                        <div class="size-grid">
+                            {size.map((s: string) => (
+                                <button class="size-button">{s}</button>
+                            ))}
+                        </div>
+                    ) : (
+                        <p>{size}</p>
+                    )}
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style>
+    .popup-overlay {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        z-index: 1000;
+    }
+
+    .popup-overlay.hidden {
+        display: none;
+    }
+
+    .popup-content {
+        background-color: #23262d;
+        padding: 2rem;
+        border-radius: 8px;
+        position: relative;
+        max-width: 90%;
+        width: 600px;
+        color: white;
+    }
+
+    .close-button {
+        position: absolute;
+        top: 10px;
+        right: 10px;
+        background: none;
+        border: none;
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: white;
+    }
+
+    .popup-body {
+        display: flex;
+        gap: 2rem;
+        align-items: flex-start;
+    }
+
+    .product-info {
+        flex: 1;
+    }
+
+    .price {
+        font-size: 1.25rem;
+        font-weight: bold;
+        margin: 1rem 0;
+    }
+
+    .sizes {
+        margin-top: 1rem;
+    }
+
+    .size-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(60px, 1fr));
+        gap: 0.5rem;
+        margin-top: 0.5rem;
+    }
+
+    .size-button {
+        padding: 0.5rem;
+        background-color: #2e3238;
+        border: none;
+        border-radius: 4px;
+        color: white;
+        cursor: pointer;
+        transition: background-color 0.2s;
+    }
+
+    .size-button:hover {
+        background-color: #4e5259;
+    }
+
+    @media (max-width: 768px) {
+        .popup-body {
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .product-info {
+            text-align: center;
+        }
+    }
+</style>
+
+<script>
+    function setupPopup() {
+        const overlay = document.getElementById('popup-overlay');
+        const closeButton = overlay?.querySelector('.close-button');
+        
+        if (closeButton && overlay) {
+            closeButton.addEventListener('click', () => {
+                overlay.classList.add('hidden');
+            });
+
+            overlay.addEventListener('click', (e) => {
+                if (e.target === overlay) {
+                    overlay.classList.add('hidden');
+                }
+            });
+        }
+    }
+
+    // Setup popup when the component is mounted
+    setupPopup();
+
+    // Setup popup when the document is loaded (for client-side navigation)
+    document.addEventListener('astro:page-load', setupPopup);
+</script>

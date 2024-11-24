@@ -1,0 +1,425 @@
+---
+import Layout from '../layouts/Layout.astro'
+import Card from '../components/Card.astro'
+import PopupModal from '../components/PopupModal.astro'
+
+const products = []
+for (let i = 0; i < 12; i++) {
+    products.push({
+        id: i.toString(),
+        img: '/t-shirt.png',
+        size: ['S', 'M', 'L', 'XL'][Math.floor(Math.random() * 4)],
+        title: 'Sense of Productivity',
+        price: 500 * Math.floor(Math.random() * 4),
+    })
+}
+---
+
+<Layout title="HBD">
+    <main>
+        <header class="header">
+            <a
+                href="https://t.me/hbd_unqiue"
+                class="telegram-link"
+                style="font-weight: 600;">TG</a
+            >
+            <a href="#" class="brand">
+                <h2 class="cormorant-garamond-semibold">HBD</h2>
+            </a>
+            <button class="cart-button" aria-label="Shopping cart">
+                <img src="/cart.svg" alt="" width="32" height="32" />
+            </button>
+        </header>
+
+        <h1 class="main-title">Hell Be Different</h1>
+
+        <div class="filters-container">
+            <button class="filter-button" aria-label="Open filters">
+                <img
+                    src="/filter.svg"
+                    alt=""
+                    width="48"
+                    height="48"
+                    class="filter-icon"
+                />
+            </button>
+            <button class="search-button" aria-label="Open search">
+                <img
+                    src="/search.svg"
+                    alt=""
+                    width="48"
+                    height="48"
+                    class="search-icon"
+                />
+            </button>
+
+            <div class="filter-panel">
+                <h3>Filters</h3>
+                <div class="filter-options">
+                    <div class="filter-group">
+                        <h4>Price Range</h4>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="price"
+                                value="0-1000"
+                            />
+                            0 - 1000 ₽
+                        </label>
+                        <label>
+                            <input
+                                type="checkbox"
+                                name="price"
+                                value="1000-2000"
+                            />
+                            1000 - 2000 ₽
+                        </label>
+                        <label>
+                            <input type="checkbox" name="price" value="2000+" />
+                            2000+ ₽
+                        </label>
+                    </div>
+                    <div class="filter-group">
+                        <h4>Size</h4>
+                        <label>
+                            <input type="checkbox" name="size" value="s" />
+                            S
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="m" />
+                            M
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="l" />
+                            L
+                        </label>
+                        <label>
+                            <input type="checkbox" name="size" value="xl" />
+                            XL
+                        </label>
+                    </div>
+                </div>
+            </div>
+
+            <div class="search-panel">
+                <div class="search-input-container">
+                    <input
+                        type="text"
+                        placeholder="Search products..."
+                        class="search-input"
+                    />
+                    <button class="close-search" aria-label="Close search"
+                        >×</button
+                    >
+                </div>
+            </div>
+        </div>
+
+        <section class="catalog" aria-label="Product catalog">
+            <ul class="goods">
+                {
+                    products.map((product) => (
+                        <>
+                            <Card {...product} />
+                            <PopupModal {...product} />
+                        </>
+                    ))
+                }
+            </ul>
+        </section>
+
+        <footer class="footer">
+            <nav class="actions" aria-label="Footer navigation">
+                <a href="#privacy">Socials</a>
+                <a href="#faq">F.A.Q.</a>
+                <a href="#support">Feedback & Support</a>
+            </nav>
+
+            <section class="main-footer">
+                <h2>
+                    HBD idea is: <br />
+                    Productivity is a state of mind, not a product
+                </h2>
+                <p>&copy; 2024 HBD. All rights reserved.</p>
+            </section>
+        </footer>
+    </main>
+</Layout>
+
+<style>
+    :global(html) {
+        scroll-behavior: smooth;
+        overflow-y: scroll;
+        -webkit-overflow-scrolling: touch;
+    }
+
+    main {
+        margin: auto;
+        padding: 1.5rem;
+        width: min(1400px, 100% - 3rem);
+        color: white;
+        font-size: 20px;
+        line-height: 1.6;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 2rem;
+    }
+
+    * {
+        text-decoration: none;
+        list-style-type: none;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    a {
+        color: white;
+    }
+
+    .header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        width: 100%;
+        max-width: calc(100% + 1rem);
+        padding: 1rem;
+        background: rgba(35, 38, 45, 0.8);
+        backdrop-filter: blur(8px);
+        border-radius: 7px;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .cart-button {
+        background: none;
+        border: none;
+        padding: 0;
+        cursor: pointer;
+        transition: transform 0.2s ease;
+
+        &:hover {
+            transform: scale(1.1);
+        }
+    }
+
+    .main-title {
+        font-size: clamp(2rem, 5vw, 3.5rem);
+        text-align: center;
+        font-family: 'Cormorant Garamond', serif;
+        font-weight: 600;
+        line-height: 1.2;
+    }
+
+    .filters-container {
+        position: relative;
+        display: flex;
+        gap: 1rem;
+        width: 100%;
+        justify-content: center;
+    }
+
+    .filter-button,
+    .search-button {
+        background: none;
+        border: none;
+        cursor: pointer;
+        padding: 0.5rem;
+        border-radius: 50%;
+        transition: background-color 0.2s ease;
+
+        &:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+    }
+
+    .filter-panel,
+    .search-panel {
+        position: fixed;
+        top: 0;
+        height: 100vh;
+        background: #23262d;
+        padding: 2rem;
+        box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+        transition: transform 0.3s ease;
+        z-index: 100;
+    }
+
+    .filter-panel {
+        left: 0;
+        width: 300px;
+        transform: translateX(-100%);
+
+        &.active {
+            transform: translateX(0);
+        }
+
+        h3 {
+            font-size: 1.5rem;
+            margin-bottom: 2rem;
+        }
+    }
+
+    .filter-group {
+        margin-bottom: 2rem;
+
+        h4 {
+            margin-bottom: 1rem;
+            color: #888;
+        }
+
+        label {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            margin-bottom: 0.5rem;
+            cursor: pointer;
+
+            &:hover {
+                color: #fff;
+            }
+        }
+    }
+
+    .search-panel {
+        right: 0;
+        width: 100%;
+        max-width: 500px;
+        transform: translateX(100%);
+        padding-top: 4rem;
+
+        &.active {
+            transform: translateX(0);
+        }
+    }
+
+    .search-input-container {
+        position: relative;
+        width: 100%;
+    }
+
+    .search-input {
+        width: 100%;
+        padding: 1rem;
+        background: rgba(255, 255, 255, 0.1);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        color: white;
+        font-size: 1.1rem;
+
+        &:focus {
+            outline: none;
+            border-color: rgba(255, 255, 255, 0.4);
+        }
+    }
+
+    .close-search {
+        position: absolute;
+        right: 1rem;
+        top: 50%;
+        transform: translateY(-50%);
+        background: none;
+        border: none;
+        color: white;
+        font-size: 1.5rem;
+        cursor: pointer;
+        opacity: 0.7;
+
+        &:hover {
+            opacity: 1;
+        }
+    }
+
+    .catalog {
+        width: 100%;
+    }
+
+    .goods {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(min(100%, 300px), 1fr));
+        gap: 2rem;
+        width: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .footer {
+        width: 100%;
+        padding: 2rem 0;
+    }
+    .main-footer {
+        margin-top: 2rem;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 1rem;
+        text-align: center;
+        background-color: #23262d;
+        padding: 2rem;
+        border-radius: 8px;
+        box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+    }
+
+    .actions {
+        display: flex;
+        justify-content: space-between;
+        flex-wrap: wrap;
+
+        a {
+            width: 30%;
+            text-align: center;
+            color: white;
+            text-decoration: none;
+            transition: opacity 0.2s ease;
+            padding: 0.5rem 1rem;
+            border-radius: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            box-shadow: inset 0 0 0 1px rgba(255, 255, 255, 0.1);
+            &:hover {
+                opacity: 0.8;
+            }
+        }
+    }
+</style>
+
+<script>
+    const filterButton = document.querySelector('.filter-button')
+    const searchButton = document.querySelector('.search-button')
+    const filterPanel = document.querySelector('.filter-panel')
+    const searchPanel = document.querySelector('.search-panel')
+    const closeSearch = document.querySelector('.close-search')
+
+    filterButton?.addEventListener('click', () => {
+        filterPanel?.classList.toggle('active')
+        searchPanel?.classList.remove('active')
+    })
+
+    searchButton?.addEventListener('click', () => {
+        searchPanel?.classList.toggle('active')
+        filterPanel?.classList.remove('active')
+        if (searchPanel?.classList.contains('active')) {
+            document.querySelector('.search-input')?.focus()
+        }
+    })
+
+    closeSearch?.addEventListener('click', () => {
+        searchPanel?.classList.remove('active')
+    })
+
+    // Close panels when clicking outside
+    document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement
+        if (
+            !target.closest('.filter-panel') &&
+            !target.closest('.filter-button') &&
+            !target.closest('.search-panel') &&
+            !target.closest('.search-button')
+        ) {
+            filterPanel?.classList.remove('active')
+            searchPanel?.classList.remove('active')
+        }
+    })
+</script>
